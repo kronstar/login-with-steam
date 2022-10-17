@@ -4,7 +4,9 @@ function p($arr){
     return '<pre>'.print_r($arr,true).'</pre>';
 }
 
+echo p($_GET);
 
+//Xây dựng các tham số để gửi đến steam openid
 $params = [
     'openid.assoc_handle' => $_GET['openid_assoc_handle'],
     'openid.signed'       => $_GET['openid_signed'],
@@ -19,6 +21,8 @@ foreach ($signed as $item) {
     $val = $_GET['openid_'.str_replace('.', '_', $item)];
     $params['openid.'.$item] = stripslashes($val);
 }
+
+echo p($params);
 
 $data = http_build_query($params);
 //data prep
@@ -38,10 +42,10 @@ $result = file_get_contents('https://steamcommunity.com/openid/login', false, $c
 if(preg_match("#is_valid\s*:\s*true#i", $result)){
     preg_match('#^https://steamcommunity.com/openid/id/([0-9]{17,25})#', $_GET['openid_claimed_id'], $matches);
     $steamID64 = is_numeric($matches[1]) ? $matches[1] : 0;
-    echo 'request has been validated by open id, returning the client id (steam id) of: ' . $steamID64;    
+    echo 'Yêu cầu đã được xác thực bởi OpenID, trả về id ứng dụng của khách (Steam ID): ' . $steamID64;    
 
 }else{
-    echo 'error: unable to validate your request';
+    echo 'Lỗi: Không thể xác thực yêu cầu!';
     exit();
 }
 

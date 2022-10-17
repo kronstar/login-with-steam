@@ -34,6 +34,5 @@ $realname = $_SESSION['userData']['realname'];
         </div>
         <a href="logout.php" class="text-sm mt-5">Logout</a>
     </div>
-
 </body>
 </html>
